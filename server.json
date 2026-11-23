@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.morphasoft/morpha-mcp",
+  "title": "Morpha",
+  "description": "Operate Morpha, a parametric 3D CAD for Windows: sketches, features, assemblies, drawings.",
+  "websiteUrl": "https://morphasoft.com/en/",
+  "repository": {
+    "url": "https://github.com/morphasoft/morpha-mcp",
+    "source": "github"
+  },
+  "version": "0.1.12",
+  "packages": [
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/morphasoft/morpha-mcp/releases/download/v0.1.12/morpha-mcp-0.1.12.mcpb",
+      "fileSha256": "89d8d17eb7faa6b0b24606312fa2c3e42560524a31925c6447afb9555adabb2b",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
