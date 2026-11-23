@@ -40,9 +40,28 @@ Operations for paid features (CAE and Assembly Animation, part of the Pro plan, 
 
 ## How to connect
 
-1. In Morpha, open **Settings → External integration** and turn on **Enable external integration (API)**. It is off by default.
-2. Click **Copy settings** on the same screen. This copies the entry for your AI app, including the location of `morpha-mcp.exe` on your PC.
-3. Paste it into your AI app's MCP settings (`mcpServers`) and restart the AI app.
+First, in Morpha, open **Settings → External integration** and turn on **Enable external integration (API)**. It is off by default. Keep Morpha running while the AI app uses it.
+
+What you register in the AI app is `morpha-mcp.exe`, which is installed together with Morpha. Its location is shown on the same settings screen (by default `%LocalAppData%\MorphaCAD\current\morpha-mcp.exe`).
+
+### Claude Desktop: add the bundle (easiest)
+
+1. Download `morpha-mcp-<version>.mcpb` from the [latest release](https://github.com/morphasoft/morpha-mcp/releases/latest).
+2. In Claude Desktop, open **Settings → Extensions** and add the file.
+3. Leave the location of `morpha-mcp.exe` empty. Fill it in only if you installed Morpha somewhere else.
+
+The bundle does not contain the MCP server. It starts the `morpha-mcp.exe` installed with Morpha, so the server always matches your Morpha.
+
+### Other AI apps: register the location
+
+Register `morpha-mcp.exe` as an MCP server that runs as a **command** (stdio). It cannot be registered in a field that takes a URL.
+
+| AI app | Where | What to write |
+| --- | --- | --- |
+| Claude Desktop (by hand) | Settings → Developer → Edit Config (`claude_desktop_config.json`) | the `mcpServers` entry below |
+| Cursor | `~/.cursor/mcp.json` (all projects) or `.cursor/mcp.json` (one project) | the `mcpServers` entry below |
+| Claude Code | a terminal | `claude mcp add morpha -s user -- "C:\…\morpha-mcp.exe"` |
+| VS Code | Command Palette → **MCP: Open User Configuration** (`mcp.json`) | the `servers` entry below |
 
 ```json
 {
@@ -52,7 +71,31 @@ Operations for paid features (CAE and Assembly Animation, part of the Pro plan, 
 }
 ```
 
+VS Code uses a different key and needs the type:
+
+```json
+{
+  "servers": {
+    "morpha": { "type": "stdio", "command": "C:\\…\\morpha-mcp.exe" }
+  }
+}
+```
+
+- In JSON files, write each `\` of the location as `\\`.
+- In Claude Code, `-s user` makes the server available in every folder. Without it, the server is registered only for the folder where you ran the command.
+- Restart the AI app after registering.
+
+The formats above were checked against each app's documentation on November 23, 2026. Apps change their settings from time to time (VS Code is moving to a newer format), so follow the app's own documentation if it differs.
+
 Then try: *“Make a 100 × 60 mm plate, 8 mm thick, with M6 tapped holes in the four corners.”*
+
+### If it does not connect
+
+1. Is Morpha running, and is **Enable external integration (API)** on?
+2. Did you restart the AI app after registering?
+3. Is `morpha-mcp.exe` registered as a command, not as a URL?
+4. Does the location match the one shown in Morpha's settings? In a JSON file, is each `\` written as `\\`?
+5. Still not working? Please open an [issue](https://github.com/morphasoft/morpha-mcp/issues) with the AI app's name and the error message.
 
 ## Where your data goes
 

@@ -40,9 +40,28 @@ MCP のサーバーには、約 270 の操作があります。画面と同じ�
 
 ## つなぎ方
 
-1. Morpha の **設定 →「外部連携」** で、**「外部連携（API）を有効にする」** をオンにします（最初はオフです）。
-2. 同じ画面の **「設定をコピー」** を押します。AI アプリに登録する内容（お使いの PC の `morpha-mcp.exe` の場所を含む）がコピーされます。
-3. AI アプリの MCP の設定（`mcpServers`）に貼り付けて、AI アプリを起動し直します。
+はじめに、Morpha の **設定 →「外部連携」** で、**「外部連携（API）を有効にする」** をオンにします（最初はオフです）。AI アプリから使う間は、Morpha を起動したままにします。
+
+AI アプリに登録するのは、Morpha と一緒に入る `morpha-mcp.exe` です。場所は同じ設定の画面に出ます（標準では `%LocalAppData%\MorphaCAD\current\morpha-mcp.exe`）。
+
+### Claude Desktop：ファイルを入れる（かんたん）
+
+1. [最新のリリース](https://github.com/morphasoft/morpha-mcp/releases/latest)から `morpha-mcp-<版>.mcpb` をダウンロードします。
+2. Claude Desktop の **「設定」→「拡張機能」** を開いて、そのファイルを入れます。
+3. `morpha-mcp.exe` の場所の欄は、空のままにします。Morpha を別の場所に入れたときだけ、場所を入れます。
+
+このファイルに MCP サーバーは入っていません。Morpha と一緒に入っている `morpha-mcp.exe` を起動するので、いつもお使いの Morpha と同じ版になります。
+
+### ほかの AI アプリ：場所を登録する
+
+`morpha-mcp.exe` を、**コマンド**として動かす MCP サーバー（stdio）として登録します。URL（アドレス）を入れる欄には登録できません。
+
+| AI アプリ | 書く場所 | 書く内容 |
+| --- | --- | --- |
+| Claude Desktop（手で書く） | 「設定」→「開発者」→「構成を編集」（`claude_desktop_config.json`） | 下の `mcpServers` |
+| Cursor | `~/.cursor/mcp.json`（全部のプロジェクト）か `.cursor/mcp.json`（1つのプロジェクト） | 下の `mcpServers` |
+| Claude Code | ターミナル | `claude mcp add morpha -s user -- "C:\…\morpha-mcp.exe"` |
+| VS Code | コマンドパレット →「MCP: Open User Configuration」（`mcp.json`） | 下の `servers` |
 
 ```json
 {
@@ -52,7 +71,31 @@ MCP のサーバーには、約 270 の操作があります。画面と同じ�
 }
 ```
 
+VS Code は、名前が `servers` で、種類（`type`）も書きます。
+
+```json
+{
+  "servers": {
+    "morpha": { "type": "stdio", "command": "C:\\…\\morpha-mcp.exe" }
+  }
+}
+```
+
+- JSON のファイルでは、場所の `\` を `\\` と2つ重ねて書きます。
+- Claude Code では、`-s user` を付けると、どのフォルダでも使えます。付けないと、コマンドを打ったフォルダだけに登録されます。
+- 登録したら、AI アプリを起動し直します。
+
+上の書き方は、2026年11月23日に各アプリの公式の説明で確かめました。設定の形はアプリの更新で変わることがあります（VS Code は新しい形に移っている途中です）。違っていたら、アプリの説明に従ってください。メニューの日本語の名前は、アプリの版で違うことがあります。
+
 つながったら、たとえば「100×60mm、厚さ 8mm の板の四隅に、M6 のねじ穴をあけて」と頼んでみてください。
+
+### つながらないとき
+
+1. Morpha は起動していますか。「外部連携（API）を有効にする」はオンですか。
+2. 登録した後に、AI アプリを起動し直しましたか。
+3. `morpha-mcp.exe` を、URL ではなくコマンドとして登録していますか。
+4. 場所は、Morpha の設定の画面に出ているものと同じですか。JSON のファイルでは、`\` を `\\` と書いていますか。
+5. それでもつながらないときは、AI アプリの名前とエラーの文を添えて、[issues](https://github.com/morphasoft/morpha-mcp/issues) でお知らせください。
 
 ## データはどこへ送られるか
 

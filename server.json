@@ -8,12 +8,12 @@
     "url": "https://github.com/morphasoft/morpha-mcp",
     "source": "github"
   },
-  "version": "0.1.12",
+  "version": "0.2.0",
   "packages": [
     {
       "registryType": "mcpb",
-      "identifier": "https://github.com/morphasoft/morpha-mcp/releases/download/v0.1.12/morpha-mcp-0.1.12.mcpb",
-      "fileSha256": "89d8d17eb7faa6b0b24606312fa2c3e42560524a31925c6447afb9555adabb2b",
+      "identifier": "https://github.com/morphasoft/morpha-mcp/releases/download/v0.2.0/morpha-mcp-0.2.0.mcpb",
+      "fileSha256": "bf6d69d818167e230b46f61a160f27b50600e3d66d4c13cf39b07466b2be4084",
       "transport": {
         "type": "stdio"
       }
